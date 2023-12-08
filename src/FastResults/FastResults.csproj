@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>enable</Nullable>
+	  <RootNamespace>FarzanHajian.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+	  <PackageId>FarzanHajian.$(AssemblyName)</PackageId>
+	  <Title>FastResults</Title>
+	  <Authors>farzanhajian</Authors>
+	  <Description>A nimble .NET library for implementing the Result pattern, enhancing code readability and error management in your applications.</Description>
+	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	  <PackageProjectUrl>https://github.com/FarzanHajian/FastResults</PackageProjectUrl>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+	  <RepositoryUrl>https://github.com/FarzanHajian/FastResults</RepositoryUrl>
+	  <PackageTags>result optional</PackageTags>
+	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
