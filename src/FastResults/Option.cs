@@ -82,7 +82,7 @@ public struct Option<TValue>
     /// </summary>
     /// <param name="some">The callable object to be invoked when the instance holds a value</param>
     /// <param name="none">The callable object to be invoked when the instance is empty</param>
-    public readonly Task MatchAsync(Func<TValue, Task> some, Func<Task> none)
+    public readonly Task Match(Func<TValue, Task> some, Func<Task> none)
     {
         return isSome ? some(value!) : none();
     }
@@ -104,7 +104,7 @@ public struct Option<TValue>
     /// <typeparam name="TRet">Type of the resturning value</typeparam>
     /// <param name="some">The function to be invoked when the instance holds a value</param>
     /// <param name="none">The function object to be invoked when the instance is empty</param>
-    public readonly Task<TRet> MatchReturnAsync<TRet>(Func<TValue, Task<TRet>> some, Func<Task<TRet>> none)
+    public readonly Task<TRet> MatchReturn<TRet>(Func<TValue, Task<TRet>> some, Func<Task<TRet>> none)
     {
         return isSome ? some(value!) : none();
     }

@@ -1,4 +1,5 @@
 ﻿using FarzanHajian.FastResults;
+using System.Runtime.CompilerServices;
 
 namespace FastResults.Test;
 
@@ -53,11 +54,11 @@ public class ResultValueTests
     {
         string buffer = "";
         Result<string> result = new("Valid Data");
-        await result.MatchAsync(async str => { buffer = str; await Task.CompletedTask; }, async err => { buffer = err.Message; await Task.CompletedTask; });
+        await result.Match(async str => { buffer = str; await Task.CompletedTask; }, async err => { buffer = err.Message; await Task.CompletedTask; });
         buffer.Should().Be("Valid Data");
 
         result = new(new Error("ERROR"));
-        await result.MatchAsync(async str => { buffer = str; await Task.CompletedTask; }, async err => { buffer = err.Message; await Task.CompletedTask; });
+        await result.Match(async str => { buffer = str; await Task.CompletedTask; }, async err => { buffer = err.Message; await Task.CompletedTask; });
         buffer.Should().Be("ERROR");
     }
 
@@ -79,12 +80,68 @@ public class ResultValueTests
     {
         string buffer = "";
         Result<string> result = new("Valid Data");
-        buffer = await result.MatchReturnAsync(async str => { await Task.CompletedTask; return str; }, async err => { await Task.CompletedTask; return err.Message; });
+        buffer = await result.MatchReturn(async str => { await Task.CompletedTask; return str; }, async err => { await Task.CompletedTask; return err.Message; });
         buffer.Should().Be("Valid Data");
 
         result = new(new Error("ERROR"));
-        buffer = await result.MatchReturnAsync(async str => { await Task.CompletedTask; return str; }, async err => { await Task.CompletedTask; return err.Message; });
+        buffer = await result.MatchReturn(async str => { await Task.CompletedTask; return str; }, async err => { await Task.CompletedTask; return err.Message; });
         buffer.Should().Be("ERROR");
+    }
+
+    [TestMethod]
+    public void IfSuccess()
+    {
+        var succ = (string val) => new Result<string>(val + " Operation Result");
+
+        Result<string> success = new("Success");
+        Result<string> result = success.IfSuccess(succ);
+        TestSuccess(result, "Success Operation Result", "");
+
+        Result<string> failure = new(new Error("Failure"));
+        result = failure.IfSuccess(succ);
+        TestFailure(result, "Failure", "");
+    }
+
+    [TestMethod]
+    public async Task IfSuccessAsync()
+    {
+        var succ = async (string val) => { await Task.CompletedTask; return new Result<string>(val + " Operation Result"); };
+
+        Result<string> success = new("Success");
+        Result<string> result = await success.IfSuccess(succ);
+        TestSuccess(result, "Success Operation Result", "");
+
+        Result<string> failure = new(new Error("Failure"));
+        result = await failure.IfSuccess(succ);
+        TestFailure(result, "Failure", "");
+    }
+
+    [TestMethod]
+    public void IfFailure()
+    {
+        var fail = (Error err) => new Result<string>(new Error(err.Message + " Operation Result"));
+
+        Result<string> success = new("Success");
+        Result<string> result = success.IfFailure(fail);
+        TestSuccess(result, "Success", "");
+
+        Result<string> failure = new(new Error("Failure"));
+        result = failure.IfFailure(fail);
+        TestFailure(result, "Failure Operation Result", "");
+    }
+
+    [TestMethod]
+    public async Task IfFailureAsync()
+    {
+        var fail = async (Error err) => { await Task.CompletedTask; return new Result<string>(new Error(err.Message + " Operation Result")); };
+
+        Result<string> success = new("Success");
+        Result<string> result = await success.IfFailure(fail);
+        TestSuccess(result, "Success", "");
+
+        Result<string> failure = new(new Error("Failure"));
+        result = await failure.IfFailure(fail);
+        TestFailure(result, "Failure Operation Result", "");
     }
 
     [TestMethod]

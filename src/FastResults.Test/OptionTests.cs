@@ -62,11 +62,11 @@ public class OptionTests
     {
         string buffer = "";
         Option<string> option = new("Valid data");
-        await option.MatchAsync(async str => { buffer = str; await Task.CompletedTask; }, async () => { buffer = "ERROR"; await Task.CompletedTask; });
+        await option.Match(async str => { buffer = str; await Task.CompletedTask; }, async () => { buffer = "ERROR"; await Task.CompletedTask; });
         buffer.Should().Be("Valid data");
 
         option = new();
-        await option.MatchAsync(async str => { buffer = str; await Task.CompletedTask; }, async () => { buffer = "ERROR"; await Task.CompletedTask; });
+        await option.Match(async str => { buffer = str; await Task.CompletedTask; }, async () => { buffer = "ERROR"; await Task.CompletedTask; });
         buffer.Should().Be("ERROR");
     }
 
@@ -88,11 +88,11 @@ public class OptionTests
     {
         string buffer = "";
         Option<string> option = new("Valid data");
-        buffer = await option.MatchReturnAsync(async str => { await Task.CompletedTask; return str; }, async () => { await Task.CompletedTask; return "ERROR"; });
+        buffer = await option.MatchReturn(async str => { await Task.CompletedTask; return str; }, async () => { await Task.CompletedTask; return "ERROR"; });
         buffer.Should().Be("Valid data");
 
         option = new();
-        buffer = await option.MatchReturnAsync(async str => { await Task.CompletedTask; return str; }, async () => { await Task.CompletedTask; return "ERROR"; });
+        buffer = await option.MatchReturn(async str => { await Task.CompletedTask; return str; }, async () => { await Task.CompletedTask; return "ERROR"; });
         buffer.Should().Be("ERROR");
     }
 

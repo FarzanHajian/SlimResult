@@ -100,7 +100,7 @@ public readonly struct Result<TValue>
     /// </summary>
     /// <param name="succ">The callable object to be invoked when the result is successful</param>
     /// <param name="fail">The callable object to be invoked when the result is failed</param>
-    public Task MatchAsync(Func<TValue, Task> succ, Func<Error, Task> fail)
+    public Task Match(Func<TValue, Task> succ, Func<Error, Task> fail)
     {
         return isSuccess ? succ(value.Value) : fail(error.Value);
     }
@@ -122,7 +122,7 @@ public readonly struct Result<TValue>
     /// <typeparam name="TRet">Type of the resturning value</typeparam>
     /// <param name="succ">The function to be invoked when the result is successful</param>
     /// <param name="fail">The function to be invoked when the result is failed</param>
-    public Task<TRet> MatchReturnAsync<TRet>(Func<TValue, Task<TRet>> succ, Func<Error, Task<TRet>> fail)
+    public Task<TRet> MatchReturn<TRet>(Func<TValue, Task<TRet>> succ, Func<Error, Task<TRet>> fail)
     {
         return isSuccess ? succ(value.Value) : fail(error.Value);
     }
@@ -132,9 +132,9 @@ public readonly struct Result<TValue>
     /// </summary>
     /// <param name="succ">The custom handler</param>
     /// <returns>A <see cref="Result{TValue}"/> instnace</returns>
-    public Result<TValue> IfSuccess(Func<Result<TValue>> succ)
+    public Result<TValue> IfSuccess(Func<TValue, Result<TValue>> succ)
     {
-        return isSuccess ? succ() : this;
+        return isSuccess ? succ(Value) : this;
     }
 
     /// <summary>
@@ -142,9 +142,9 @@ public readonly struct Result<TValue>
     /// </summary>
     /// <param name="succ">The custom handler</param>
     /// <returns>A <see cref="Result{TValue}"/> instnace</returns>
-    public Task<Result<TValue>> IfSuccessAsync(Func<Task<Result<TValue>>> succ)
+    public Task<Result<TValue>> IfSuccess(Func<TValue, Task<Result<TValue>>> succ)
     {
-        return isSuccess ? succ() : Task.FromResult(this);
+        return isSuccess ? succ(Value) : Task.FromResult(this);
     }
 
     /// <summary>
@@ -152,9 +152,9 @@ public readonly struct Result<TValue>
     /// </summary>
     /// <param name="fail">The custom handler</param>
     /// <returns>A <see cref="Result{TValue}"/> instnace</returns>
-    public Result<TValue> IfFailure(Func<Result<TValue>> fail)
+    public Result<TValue> IfFailure(Func<Error, Result<TValue>> fail)
     {
-        return isSuccess ? this : fail();
+        return isSuccess ? this : fail(Error);
     }
 
     /// <summary>
@@ -162,9 +162,9 @@ public readonly struct Result<TValue>
     /// </summary>
     /// <param name="fail">The custom handler</param>
     /// <returns>A <see cref="Result{TValue}"/> instnace</returns>
-    public Task<Result<TValue>> IfFailureAsync(Func<Task<Result<TValue>>> fail)
+    public Task<Result<TValue>> IfFailure(Func<Error, Task<Result<TValue>>> fail)
     {
-        return isSuccess ? Task.FromResult(this) : fail();
+        return isSuccess ? Task.FromResult(this) : fail(Error);
     }
 
     /// <summary>
@@ -267,7 +267,7 @@ public readonly struct Result
     /// </summary>
     /// <param name="succ">The callable object to be invoked when the result is successful</param>
     /// <param name="fail">The callable object to be invoked when the result is failed</param>
-    public Task MatchAsync(Func<Task> succ, Func<Error, Task> fail)
+    public Task Match(Func<Task> succ, Func<Error, Task> fail)
     {
         return isSuccess ? succ() : fail(error.Value);
     }
@@ -289,7 +289,7 @@ public readonly struct Result
     /// <typeparam name="TRet">Type of the resturning value</typeparam>
     /// <param name="succ">The function to be invoked when the result is successful</param>
     /// <param name="fail">The function to be invoked when the result is failed</param>
-    public Task<TRet> MatchReturnAsync<TRet>(Func<Task<TRet>> succ, Func<Error, Task<TRet>> fail)
+    public Task<TRet> MatchReturn<TRet>(Func<Task<TRet>> succ, Func<Error, Task<TRet>> fail)
     {
         return isSuccess ? succ() : fail(error.Value);
     }
@@ -309,7 +309,7 @@ public readonly struct Result
     /// </summary>
     /// <param name="succ">The custom handler</param>
     /// <returns>A <see cref="Result"/> instnace</returns>
-    public Task<Result> IfSuccessAsync(Func<Task<Result>> succ)
+    public Task<Result> IfSuccess(Func<Task<Result>> succ)
     {
         return isSuccess ? succ() : Task.FromResult(this);
     }
@@ -319,9 +319,9 @@ public readonly struct Result
     /// </summary>
     /// <param name="fail">The custom handler</param>
     /// <returns>A <see cref="Result"/> instnace</returns>
-    public Result IfFailure(Func<Result> fail)
+    public Result IfFailure(Func<Error, Result> fail)
     {
-        return isSuccess ? this : fail();
+        return isSuccess ? this : fail(Error);
     }
 
     /// <summary>
@@ -329,9 +329,9 @@ public readonly struct Result
     /// </summary>
     /// <param name="fail">The custom handler</param>
     /// <returns>A <see cref="Result"/> instnace</returns>
-    public Task<Result> IfFailureAsync(Func<Task<Result>> fail)
+    public Task<Result> IfFailure(Func<Error, Task<Result>> fail)
     {
-        return isSuccess ? Task.FromResult(this) : fail();
+        return isSuccess ? Task.FromResult(this) : fail(Error);
     }
 
     /// <summary>
@@ -344,7 +344,6 @@ public readonly struct Result
     /// Create a failed result using an <see cref="FastResults.Error"/> or <see cref="Exception"/>.
     /// </summary>
     /// <param name="error">The error (or exception) to be held by the result</param>
-
     public static Result Failure(Error error) => new(error);
 
     /// <summary>
@@ -372,7 +371,7 @@ public readonly struct Result
     /// <param name="action">The callable object to be invoked</param>
     /// <param name="handler">An oprtional custom expcetion handler which should return a failed result</param>
     /// <returns>A successful result if the callable object executes successully of a failed result if it throws an exception.</returns>
-    public static Task<Result> TryAsync(Func<Task> action, Func<Exception, Result>? handler = null)
+    public static Task<Result> Try(Func<Task> action, Func<Exception, Result>? handler = null)
     {
         return action().ContinueWith(Continue);
 
