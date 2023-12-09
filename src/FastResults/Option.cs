@@ -125,4 +125,10 @@ public struct Option<TValue>
     /// </summary>
     /// <param name="value">The value to be held by the instance</param>
     public static implicit operator Option<TValue>(TValue value) => new(value);
+
+    /// <summary>
+    /// The implicit cast operator to a value. If the option instance is empty, <see cref="InvalidOperationException"/> is thrown.
+    /// </summary>
+    /// <param name="option">The source option instance</param>
+    public static implicit operator TValue(Option<TValue> option) => option.Value;
 }

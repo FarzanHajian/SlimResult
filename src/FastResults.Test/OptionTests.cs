@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace FastResults.Test;
 
 [TestClass]
@@ -97,10 +99,18 @@ public class OptionTests
     }
 
     [TestMethod]
-    public void ImplicitCast()
+    public void ImplicitCasts()
     {
-        Option<int> option = 7;
-        TestSome(option, 7);
+        Option<int> iOption = 7;
+        TestSome(iOption, 7);
+
+        Option<float> fOption = new(3.14f); ;
+        float fValue = fOption;
+        fValue.Should().Be(3.14f);
+
+        Option<string> empty = new();
+        var action = () => { string sValue = empty; };
+        action.Should().Throw<InvalidOperationException>().WithMessage($"The current {nameof(Option<string>)} instance is empty.");
     }
 
     private static void TestSome<T>(Option<T> option, T expectedValue)
