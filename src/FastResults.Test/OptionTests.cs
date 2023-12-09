@@ -51,13 +51,9 @@ public class OptionTests
         Option<string> option = new("Valid data");
         option.Match(str => buffer = str, () => buffer = "ERROR");
         buffer.Should().Be("Valid data");
-        option.Match();
-        buffer.Should().Be("Valid data");
 
         option = new();
         option.Match(str => buffer = str, () => buffer = "ERROR");
-        buffer.Should().Be("ERROR");
-        option.Match();
         buffer.Should().Be("ERROR");
     }
 
@@ -68,39 +64,35 @@ public class OptionTests
         Option<string> option = new("Valid data");
         await option.MatchAsync(async str => { buffer = str; await Task.CompletedTask; }, async () => { buffer = "ERROR"; await Task.CompletedTask; });
         buffer.Should().Be("Valid data");
-        await option.MatchAsync();
-        buffer.Should().Be("Valid data");
 
         option = new();
         await option.MatchAsync(async str => { buffer = str; await Task.CompletedTask; }, async () => { buffer = "ERROR"; await Task.CompletedTask; });
         buffer.Should().Be("ERROR");
-        await option.MatchAsync();
+    }
+
+    [TestMethod]
+    public void MatchReturn()
+    {
+        string buffer = "";
+        Option<string> option = new("Valid data");
+        buffer = option.MatchReturn(str => str, () => "ERROR");
+        buffer.Should().Be("Valid data");
+
+        option = new();
+        buffer = option.MatchReturn(str => str, () => "ERROR");
         buffer.Should().Be("ERROR");
     }
 
     [TestMethod]
-    public void MatchValue()
+    public async Task MatchReturnAsync()
     {
         string buffer = "";
         Option<string> option = new("Valid data");
-        buffer = option.MatchValue(str => str, () => "ERROR");
+        buffer = await option.MatchReturnAsync(async str => { await Task.CompletedTask; return str; }, async () => { await Task.CompletedTask; return "ERROR"; });
         buffer.Should().Be("Valid data");
 
         option = new();
-        buffer = option.MatchValue(str => str, () => "ERROR");
-        buffer.Should().Be("ERROR");
-    }
-
-    [TestMethod]
-    public async Task MatchValueAsync()
-    {
-        string buffer = "";
-        Option<string> option = new("Valid data");
-        buffer = await option.MatchValueAsync(async str => { await Task.CompletedTask; return str; }, async () => { await Task.CompletedTask; return "ERROR"; });
-        buffer.Should().Be("Valid data");
-
-        option = new();
-        buffer = await option.MatchValueAsync(async str => { await Task.CompletedTask; return str; }, async () => { await Task.CompletedTask; return "ERROR"; });
+        buffer = await option.MatchReturnAsync(async str => { await Task.CompletedTask; return str; }, async () => { await Task.CompletedTask; return "ERROR"; });
         buffer.Should().Be("ERROR");
     }
 

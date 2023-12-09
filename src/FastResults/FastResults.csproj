@@ -7,21 +7,22 @@
 	  <RootNamespace>FarzanHajian.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 	  <PackageId>FarzanHajian.$(AssemblyName)</PackageId>
 	  <Title>FastResults</Title>
-	  <Authors>farzanhajian</Authors>
+	  <Authors>Farzan Hajian</Authors>
 	  <Description>A nimble .NET library for implementing the Result pattern, enhancing code readability and error management in your applications.</Description>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	  <PackageProjectUrl>https://github.com/FarzanHajian/FastResults</PackageProjectUrl>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <RepositoryUrl>https://github.com/FarzanHajian/FastResults</RepositoryUrl>
 	  <PackageTags>result optional</PackageTags>
-	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	  <AssemblyVersion>1.0.2</AssemblyVersion>
+	  <FileVersion>$(AssemblyVersion)</FileVersion>
+	  <Version>$(AssemblyVersion)-alpha2</Version>
+	  <Copyright></Copyright>
+	  <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
     <None Include="..\..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

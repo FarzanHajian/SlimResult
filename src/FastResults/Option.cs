@@ -1,20 +1,42 @@
 ﻿namespace FarzanHajian.FastResults;
 
+/// <summary>
+/// Represents a variable that either holds a value or is empty.
+/// </summary>
+/// <typeparam name="TValue">Type of the value this instance can hold</typeparam>
 public struct Option<TValue>
 {
     private bool isSome;
     private TValue? value;
 
+    /// <summary>
+    /// Returns true if this instance is currently holding a value.
+    /// </summary>
     public readonly bool IsSome => isSome;
+
+    /// <summary>
+    /// Returns true if this instance is currently empty.
+    /// </summary>
     public readonly bool IsNone => !isSome;
+
+    /// <summary>
+    /// Returns the current value held by the instance or throws <see cref="ArgumentNullException"></see> if it is empty.
+    /// </summary>
     public readonly TValue Value => isSome ? value! : throw new InvalidOperationException($"The current {nameof(Option<TValue>)} instance is empty.");
 
+    /// <summary>
+    /// Creates an empty variable.
+    /// </summary>
     public Option()
     {
         isSome = false;
         value = default;
     }
 
+    /// <summary>
+    /// Creates a variable that hold a value or throws an <see cref="ArgumentNullException"></see> if the value is null.
+    /// </summary>
+    /// <param name="value"></param>
     public Option(TValue value)
     {
         ArgumentNullException.ThrowIfNull(value, nameof(value));
@@ -22,6 +44,10 @@ public struct Option<TValue>
         this.value = value;
     }
 
+    /// <summary>
+    /// Makes the instance hold a new value or throws an <see cref="ArgumentNullException"></see> if the value is null.
+    /// </summary>
+    /// <param name="value"></param>
     public void Set(TValue value)
     {
         ArgumentNullException.ThrowIfNull(value, nameof(value));
@@ -29,41 +55,74 @@ public struct Option<TValue>
         isSome = true;
     }
 
+    /// <summary>
+    /// Makes the instance empty by removing its value (if any).
+    /// </summary>
     public void Unset()
     {
         value = default;
         isSome = false;
     }
 
-    public readonly void Match(Action<TValue>? some = null, Action? none = null)
+    /// <summary>
+    /// Invokes one of the provided callable objects based on whether the instance holds a value or not.
+    /// </summary>
+    /// <param name="some">The callable object to be invoked when the instance holds a value</param>
+    /// <param name="none">The callable object to be invoked when the instance is empty</param>
+    public readonly void Match(Action<TValue> some, Action none)
     {
         if (isSome)
-            some?.Invoke(value!);
+            some(value!);
         else
-            none?.Invoke();
+            none();
     }
 
-    public readonly Task MatchAsync(Func<TValue, Task>? some = null, Func<Task>? none = null)
-    {
-        if (isSome)
-            return (some?.Invoke(value!)) ?? Task.CompletedTask;
-        else
-            return (none?.Invoke()) ?? Task.CompletedTask;
-    }
-
-    public readonly T MatchValue<T>(Func<TValue, T> some, Func<T> none)
+    /// <summary>
+    /// Invokes one of the provided callable objects based on whether the instance holds a value or not.
+    /// </summary>
+    /// <param name="some">The callable object to be invoked when the instance holds a value</param>
+    /// <param name="none">The callable object to be invoked when the instance is empty</param>
+    public readonly Task MatchAsync(Func<TValue, Task> some, Func<Task> none)
     {
         return isSome ? some(value!) : none();
     }
 
-    public readonly Task<T> MatchValueAsync<T>(Func<TValue, Task<T>> some, Func<Task<T>> none)
+    /// <summary>
+    /// Returns a value by invoking one of the provided functions based on whether the instance holds a value or not.
+    /// </summary>
+    /// <typeparam name="TRet">Type of the resturning value</typeparam>
+    /// <param name="some">The function to be invoked when the instance holds a value</param>
+    /// <param name="none">The function object to be invoked when the instance is empty</param>
+    public readonly TRet MatchReturn<TRet>(Func<TValue, TRet> some, Func<TRet> none)
     {
         return isSome ? some(value!) : none();
     }
 
+    /// <summary>
+    /// Returns a value by invoking one of the provided functions based on whether the instance holds a value or not.
+    /// </summary>
+    /// <typeparam name="TRet">Type of the resturning value</typeparam>
+    /// <param name="some">The function to be invoked when the instance holds a value</param>
+    /// <param name="none">The function object to be invoked when the instance is empty</param>
+    public readonly Task<TRet> MatchReturnAsync<TRet>(Func<TValue, Task<TRet>> some, Func<Task<TRet>> none)
+    {
+        return isSome ? some(value!) : none();
+    }
+
+    /// <summary>
+    /// Creates a variable that hold a value or throws an <see cref="ArgumentNullException"></see> if the value is null.
+    /// </summary>
+    /// <param name="value"></param>
     public static Option<TValue> Some(TValue value) => new(value);
 
+    /// <summary>
+    /// Creates an empty variable.
+    /// </summary>
     public static Option<TValue> None() => new();
 
+    /// <summary>
+    /// The implicit cast operator from a value.
+    /// </summary>
+    /// <param name="value">The value to be held by the instance</param>
     public static implicit operator Option<TValue>(TValue value) => new(value);
 }

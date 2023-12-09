@@ -33,13 +33,9 @@ public class ResultTests
         Result result = new();
         result.Match(() => buffer = "Valid Data", err => buffer = err.Message);
         buffer.Should().Be("Valid Data");
-        result.Match();
-        buffer.Should().Be("Valid Data");
 
         result = new(new Error("ERROR"));
         result.Match(() => buffer = "Valid Data", err => buffer = err.Message);
-        buffer.Should().Be("ERROR");
-        result.Match();
         buffer.Should().Be("ERROR");
     }
 
@@ -47,52 +43,41 @@ public class ResultTests
     public async Task MatchAsync()
     {
         string buffer = "";
-        Result result = new("Valid Data");
+        Result result = new();
         await result.MatchAsync(async () => { buffer = "Valid Data"; await Task.CompletedTask; }, async err => { buffer = err.Message; await Task.CompletedTask; });
-        buffer.Should().Be("Valid Data");
-        await result.MatchAsync();
         buffer.Should().Be("Valid Data");
 
         result = new(new Error("ERROR"));
         await result.MatchAsync(async () => { buffer = "Valid Data"; await Task.CompletedTask; }, async err => { buffer = err.Message; await Task.CompletedTask; });
         buffer.Should().Be("ERROR");
-        await result.MatchAsync();
+    }
+
+    [TestMethod]
+    public void MatchReturn()
+    {
+        string buffer = "";
+        Result result = new();
+        buffer = result.MatchReturn(() => "Valid Data", err => err.Message);
+        buffer.Should().Be("Valid Data");
+
+        result = new(new Error("ERROR"));
+        buffer = result.MatchReturn(() => "Valid Data", err => err.Message);
         buffer.Should().Be("ERROR");
     }
 
     [TestMethod]
-    public void MatchValue()
+    public async Task MatchReturnAsync()
     {
         string buffer = "";
         Result result = new();
-        buffer = result.Match(() => "Valid Data", err => err.Message);
-        buffer.Should().Be("Valid Data");
-        result.Match();
+        buffer = await result.MatchReturnAsync(async () => { await Task.CompletedTask; return "Valid Data"; }, async err => { await Task.CompletedTask; return err.Message; });
         buffer.Should().Be("Valid Data");
 
         result = new(new Error("ERROR"));
-        buffer = result.Match(() => "Valid Data", err => err.Message);
-        buffer.Should().Be("ERROR");
-        result.Match();
+        buffer = await result.MatchReturnAsync(async () => { await Task.CompletedTask; return "Valid Data"; }, async err => { await Task.CompletedTask; return err.Message; });
         buffer.Should().Be("ERROR");
     }
 
-    [TestMethod]
-    public async Task MatchValueAsync()
-    {
-        string buffer = "";
-        Result result = new();
-        buffer = await result.MatchAsync(async () => { await Task.CompletedTask; return "Valid Data"; }, async err => { await Task.CompletedTask; return err.Message; });
-        buffer.Should().Be("Valid Data");
-        await result.MatchAsync();
-        buffer.Should().Be("Valid Data");
-
-        result = new(new Error("ERROR"));
-        buffer = await result.MatchAsync(async () => { await Task.CompletedTask; return "Valid Data"; }, async err => { await Task.CompletedTask; return err.Message; });
-        buffer.Should().Be("ERROR");
-        await result.MatchAsync();
-        buffer.Should().Be("ERROR");
-    }
     [TestMethod]
     public void Try()
     {
