@@ -78,33 +78,12 @@ public struct Option<TValue>
     }
 
     /// <summary>
-    /// Invokes one of the provided callable objects based on whether the instance holds a value or not.
-    /// </summary>
-    /// <param name="some">The callable object to be invoked when the instance holds a value</param>
-    /// <param name="none">The callable object to be invoked when the instance is empty</param>
-    public readonly Task Match(Func<TValue, Task> some, Func<Task> none)
-    {
-        return isSome ? some(value!) : none();
-    }
-
-    /// <summary>
     /// Returns a value by invoking one of the provided functions based on whether the instance holds a value or not.
     /// </summary>
     /// <typeparam name="TRet">Type of the resturning value</typeparam>
     /// <param name="some">The function to be invoked when the instance holds a value</param>
     /// <param name="none">The function object to be invoked when the instance is empty</param>
-    public readonly TRet MatchReturn<TRet>(Func<TValue, TRet> some, Func<TRet> none)
-    {
-        return isSome ? some(value!) : none();
-    }
-
-    /// <summary>
-    /// Returns a value by invoking one of the provided functions based on whether the instance holds a value or not.
-    /// </summary>
-    /// <typeparam name="TRet">Type of the resturning value</typeparam>
-    /// <param name="some">The function to be invoked when the instance holds a value</param>
-    /// <param name="none">The function object to be invoked when the instance is empty</param>
-    public readonly Task<TRet> MatchReturn<TRet>(Func<TValue, Task<TRet>> some, Func<Task<TRet>> none)
+    public readonly TRet Match<TRet>(Func<TValue, TRet> some, Func<TRet> none)
     {
         return isSome ? some(value!) : none();
     }

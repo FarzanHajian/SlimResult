@@ -33,11 +33,11 @@ public class ResultTests
     {
         string buffer = "";
         Result result = new();
-        result.Match(() => buffer = "Valid Data", err => buffer = err.Message);
+        result.Match(() => { buffer = "Valid Data"; }, err => buffer = err.Message);
         buffer.Should().Be("Valid Data");
 
         result = new(new Error("ERROR"));
-        result.Match(() => buffer = "Valid Data", err => buffer = err.Message);
+        result.Match(() => { buffer = "Valid Data"; }, err => buffer = err.Message);
         buffer.Should().Be("ERROR");
     }
 
@@ -59,11 +59,11 @@ public class ResultTests
     {
         string buffer = "";
         Result result = new();
-        buffer = result.MatchReturn(() => "Valid Data", err => err.Message);
+        buffer = result.Match(() => "Valid Data", err => err.Message);
         buffer.Should().Be("Valid Data");
 
         result = new(new Error("ERROR"));
-        buffer = result.MatchReturn(() => "Valid Data", err => err.Message);
+        buffer = result.Match(() => "Valid Data", err => err.Message);
         buffer.Should().Be("ERROR");
     }
 
@@ -72,11 +72,11 @@ public class ResultTests
     {
         string buffer = "";
         Result result = new();
-        buffer = await result.MatchReturn(async () => { await Task.CompletedTask; return "Valid Data"; }, async err => { await Task.CompletedTask; return err.Message; });
+        buffer = await result.Match(async () => { await Task.CompletedTask; return "Valid Data"; }, async err => { await Task.CompletedTask; return err.Message; });
         buffer.Should().Be("Valid Data");
 
         result = new(new Error("ERROR"));
-        buffer = await result.MatchReturn(async () => { await Task.CompletedTask; return "Valid Data"; }, async err => { await Task.CompletedTask; return err.Message; });
+        buffer = await result.Match(async () => { await Task.CompletedTask; return "Valid Data"; }, async err => { await Task.CompletedTask; return err.Message; });
         buffer.Should().Be("ERROR");
     }
 

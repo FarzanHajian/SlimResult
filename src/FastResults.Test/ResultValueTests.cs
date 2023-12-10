@@ -41,11 +41,11 @@ public class ResultValueTests
     {
         string buffer = "";
         Result<string> result = new("Valid Data");
-        result.Match(str => buffer = str, err => buffer = err.Message);
+        result.Match(str => { buffer = str; }, err => buffer = err.Message);
         buffer.Should().Be("Valid Data");
 
         result = new(new Error("ERROR"));
-        result.Match(str => buffer = str, err => buffer = err.Message);
+        result.Match(str => { buffer = str; }, err => buffer = err.Message);
         buffer.Should().Be("ERROR");
     }
 
@@ -67,11 +67,11 @@ public class ResultValueTests
     {
         string buffer = "";
         Result<string> result = new("Valid Data");
-        buffer = result.MatchReturn(str => str, err => err.Message);
+        buffer = result.Match(str => str, err => err.Message);
         buffer.Should().Be("Valid Data");
 
         result = new(new Error("ERROR"));
-        buffer = result.MatchReturn(str => str, err => err.Message);
+        buffer = result.Match(str => str, err => err.Message);
         buffer.Should().Be("ERROR");
     }
 
@@ -80,11 +80,11 @@ public class ResultValueTests
     {
         string buffer = "";
         Result<string> result = new("Valid Data");
-        buffer = await result.MatchReturn(async str => { await Task.CompletedTask; return str; }, async err => { await Task.CompletedTask; return err.Message; });
+        buffer = await result.Match(async str => { await Task.CompletedTask; return str; }, async err => { await Task.CompletedTask; return err.Message; });
         buffer.Should().Be("Valid Data");
 
         result = new(new Error("ERROR"));
-        buffer = await result.MatchReturn(async str => { await Task.CompletedTask; return str; }, async err => { await Task.CompletedTask; return err.Message; });
+        buffer = await result.Match(async str => { await Task.CompletedTask; return str; }, async err => { await Task.CompletedTask; return err.Message; });
         buffer.Should().Be("ERROR");
     }
 

@@ -1,5 +1,3 @@
-using System.Runtime.Serialization;
-
 namespace FastResults.Test;
 
 [TestClass]
@@ -51,11 +49,11 @@ public class OptionTests
     {
         string buffer = "";
         Option<string> option = new("Valid data");
-        option.Match(str => buffer = str, () => buffer = "ERROR");
+        option.Match(str => { buffer = str; }, () => buffer = "ERROR");
         buffer.Should().Be("Valid data");
 
         option = new();
-        option.Match(str => buffer = str, () => buffer = "ERROR");
+        option.Match(str => { buffer = str; }, () => buffer = "ERROR");
         buffer.Should().Be("ERROR");
     }
 
@@ -73,28 +71,28 @@ public class OptionTests
     }
 
     [TestMethod]
-    public void MatchReturn()
+    public void MatchWithReturn()
     {
         string buffer = "";
         Option<string> option = new("Valid data");
-        buffer = option.MatchReturn(str => str, () => "ERROR");
+        buffer = option.Match(str => str, () => "ERROR");
         buffer.Should().Be("Valid data");
 
         option = new();
-        buffer = option.MatchReturn(str => str, () => "ERROR");
+        buffer = option.Match(str => str, () => "ERROR");
         buffer.Should().Be("ERROR");
     }
 
     [TestMethod]
-    public async Task MatchReturnAsync()
+    public async Task MatchWithReturnAsync()
     {
         string buffer = "";
         Option<string> option = new("Valid data");
-        buffer = await option.MatchReturn(async str => { await Task.CompletedTask; return str; }, async () => { await Task.CompletedTask; return "ERROR"; });
+        buffer = await option.Match(async str => { await Task.CompletedTask; return str; }, async () => { await Task.CompletedTask; return "ERROR"; });
         buffer.Should().Be("Valid data");
 
         option = new();
-        buffer = await option.MatchReturn(async str => { await Task.CompletedTask; return str; }, async () => { await Task.CompletedTask; return "ERROR"; });
+        buffer = await option.Match(async str => { await Task.CompletedTask; return str; }, async () => { await Task.CompletedTask; return "ERROR"; });
         buffer.Should().Be("ERROR");
     }
 

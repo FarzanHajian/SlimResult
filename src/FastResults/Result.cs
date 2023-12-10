@@ -96,33 +96,12 @@ public readonly struct Result<TValue>
     }
 
     /// <summary>
-    /// Invokes one of the provided callable objects based on whether the result is successful or not.
-    /// </summary>
-    /// <param name="succ">The callable object to be invoked when the result is successful</param>
-    /// <param name="fail">The callable object to be invoked when the result is failed</param>
-    public Task Match(Func<TValue, Task> succ, Func<Error, Task> fail)
-    {
-        return isSuccess ? succ(value.Value) : fail(error.Value);
-    }
-
-    /// <summary>
     /// Returns a value by invoking one of the provided functions based on whether the result is successfull or not.
     /// </summary>
     /// <typeparam name="TRet">Type of the resturning value</typeparam>
     /// <param name="succ">The function to be invoked when the result is successful</param>
     /// <param name="fail">The function to be invoked when the result is failed</param>
-    public TRet MatchReturn<TRet>(Func<TValue, TRet> succ, Func<Error, TRet> fail)
-    {
-        return isSuccess ? succ(value.Value) : fail(error.Value);
-    }
-
-    /// <summary>
-    /// Returns a value by invoking one of the provided functions based on whether the result is successfull or not.
-    /// </summary>
-    /// <typeparam name="TRet">Type of the resturning value</typeparam>
-    /// <param name="succ">The function to be invoked when the result is successful</param>
-    /// <param name="fail">The function to be invoked when the result is failed</param>
-    public Task<TRet> MatchReturn<TRet>(Func<TValue, Task<TRet>> succ, Func<Error, Task<TRet>> fail)
+    public TRet Match<TRet>(Func<TValue, TRet> succ, Func<Error, TRet> fail)
     {
         return isSuccess ? succ(value.Value) : fail(error.Value);
     }
@@ -263,33 +242,12 @@ public readonly struct Result
     }
 
     /// <summary>
-    /// Invokes one of the provided callable objects based on whether the result is successful or not.
-    /// </summary>
-    /// <param name="succ">The callable object to be invoked when the result is successful</param>
-    /// <param name="fail">The callable object to be invoked when the result is failed</param>
-    public Task Match(Func<Task> succ, Func<Error, Task> fail)
-    {
-        return isSuccess ? succ() : fail(error.Value);
-    }
-
-    /// <summary>
     /// Returns a value by invoking one of the provided functions based on whether the result is successfull or not.
     /// </summary>
     /// <typeparam name="TRet">Type of the resturning value</typeparam>
     /// <param name="succ">The function to be invoked when the result is successful</param>
     /// <param name="fail">The function to be invoked when the result is failed</param>
-    public TRet MatchReturn<TRet>(Func<TRet> succ, Func<Error, TRet> fail)
-    {
-        return isSuccess ? succ() : fail(error.Value);
-    }
-
-    /// <summary>
-    /// Returns a value by invoking one of the provided functions based on whether the result is successfull or not.
-    /// </summary>
-    /// <typeparam name="TRet">Type of the resturning value</typeparam>
-    /// <param name="succ">The function to be invoked when the result is successful</param>
-    /// <param name="fail">The function to be invoked when the result is failed</param>
-    public Task<TRet> MatchReturn<TRet>(Func<Task<TRet>> succ, Func<Error, Task<TRet>> fail)
+    public TRet Match<TRet>(Func<TRet> succ, Func<Error, TRet> fail)
     {
         return isSuccess ? succ() : fail(error.Value);
     }
