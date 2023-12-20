@@ -1,4 +1,6 @@
-﻿namespace FarzanHajian.FastResults;
+﻿using System.Runtime.CompilerServices;
+
+namespace FarzanHajian.FastResults;
 
 /// <summary>
 /// Represents an operation result with statuses of either Success or Failure.
@@ -45,7 +47,7 @@ public readonly struct Result<TValue>
     /// <summary>
     /// Creates a successful result that holds the given value.
     /// </summary>
-    /// <param name="value">The value to be held by the result</param>
+    /// <param name="value">The value to be held by the result.</param>
     public Result(TValue value)
     {
         isSuccess = true;
@@ -56,7 +58,7 @@ public readonly struct Result<TValue>
     /// <summary>
     /// Create a failed result using an <see cref="Exception"/>.
     /// </summary>
-    /// <param name="exception">The exception to be held by the result</param>
+    /// <param name="exception">The exception to be held by the result.</param>
     public Result(Exception exception)
     {
         isSuccess = false;
@@ -67,7 +69,7 @@ public readonly struct Result<TValue>
     /// <summary>
     /// Create a failed result using an <see cref="FastResults.Error"/>.
     /// </summary>
-    /// <param name="error">The error to be held by the result</param>
+    /// <param name="error">The error to be held by the result.</param>
     public Result(Error error)
     {
         isSuccess = false;
@@ -76,17 +78,17 @@ public readonly struct Result<TValue>
     }
 
     /// <summary>
-    /// Returns the value help by the result or a default one if the result is failed.
+    /// Returns the value held by the result or a default one if the result is failed.
     /// </summary>
-    /// <param name="default">The default value to be returned if the result is failed</param>
-    /// <returns></returns>
+    /// <param name="default">The default value to be returned if the result is failed.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public TValue ValueOrDefault(TValue @default) => isSuccess ? value.Value : @default;
 
     /// <summary>
     /// Invokes one of the provided callable objects based on whether the result is successful or not.
     /// </summary>
-    /// <param name="succ">The callable object to be invoked when the result is successful</param>
-    /// <param name="fail">The callable object to be invoked when the result is failed</param>
+    /// <param name="succ">The callable object to be invoked when the result is successful.</param>
+    /// <param name="fail">The callable object to be invoked when the result is failed.</param>
     public void Match(Action<TValue> succ, Action<Error> fail)
     {
         if (isSuccess)
@@ -99,8 +101,8 @@ public readonly struct Result<TValue>
     /// Returns a value by invoking one of the provided functions based on whether the result is successfull or not.
     /// </summary>
     /// <typeparam name="TRet">Type of the resturning value</typeparam>
-    /// <param name="succ">The function to be invoked when the result is successful</param>
-    /// <param name="fail">The function to be invoked when the result is failed</param>
+    /// <param name="succ">The function to be invoked when the result is successful.</param>
+    /// <param name="fail">The function to be invoked when the result is failed.</param>
     public TRet Match<TRet>(Func<TValue, TRet> succ, Func<Error, TRet> fail)
     {
         return isSuccess ? succ(value.Value) : fail(error.Value);
@@ -109,8 +111,9 @@ public readonly struct Result<TValue>
     /// <summary>
     /// Returns the returning value of the provided custom handler if the result is successful, otherwise, returns the result instance itself.
     /// </summary>
-    /// <param name="succ">The custom handler</param>
-    /// <returns>A <see cref="Result{TValue}"/> instnace</returns>
+    /// <param name="succ">The custom handler.</param>
+    /// <returns>A <see cref="Result{TValue}"/> instnace.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Result<TValue> IfSuccess(Func<TValue, Result<TValue>> succ)
     {
         return isSuccess ? succ(Value) : this;
@@ -119,8 +122,9 @@ public readonly struct Result<TValue>
     /// <summary>
     /// Returns the returning value of the provided custom handler if the result is successful, otherwise, returns the result instance itself.
     /// </summary>
-    /// <param name="succ">The custom handler</param>
-    /// <returns>A <see cref="Result{TValue}"/> instnace</returns>
+    /// <param name="succ">The custom handler.</param>
+    /// <returns>A <see cref="Result{TValue}"/> instnace.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Task<Result<TValue>> IfSuccess(Func<TValue, Task<Result<TValue>>> succ)
     {
         return isSuccess ? succ(Value) : Task.FromResult(this);
@@ -129,8 +133,9 @@ public readonly struct Result<TValue>
     /// <summary>
     /// Returns the returning value of the provided custom handler if the result is failed, otherwise, returns the result instance itself.
     /// </summary>
-    /// <param name="fail">The custom handler</param>
-    /// <returns>A <see cref="Result{TValue}"/> instnace</returns>
+    /// <param name="fail">The custom handler.</param>
+    /// <returns>A <see cref="Result{TValue}"/> instnace.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Result<TValue> IfFailure(Func<Error, Result<TValue>> fail)
     {
         return isSuccess ? this : fail(Error);
@@ -139,8 +144,9 @@ public readonly struct Result<TValue>
     /// <summary>
     /// Returns the returning value of the provided custom handler if the result is failed, otherwise, returns the result instance itself.
     /// </summary>
-    /// <param name="fail">The custom handler</param>
-    /// <returns>A <see cref="Result{TValue}"/> instnace</returns>
+    /// <param name="fail">The custom handler.</param>
+    /// <returns>A <see cref="Result{TValue}"/> instnace.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Task<Result<TValue>> IfFailure(Func<Error, Task<Result<TValue>>> fail)
     {
         return isSuccess ? Task.FromResult(this) : fail(Error);
@@ -149,25 +155,29 @@ public readonly struct Result<TValue>
     /// <summary>
     /// Creates a successful result that holds the given value.
     /// </summary>
-    /// <param name="value">The value to be held by the result</param>
+    /// <param name="value">The value to be held by the result.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> Success(TValue value) => new(value);
 
     /// <summary>
     /// Create a failed result using an <see cref="FastResults.Error"/> or <see cref="Exception"/>.
     /// </summary>
-    /// <param name="error">The error (or exception) to be held by the result</param>
+    /// <param name="error">The error (or exception) to be held by the result.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> Failure(Error error) => new(error);
 
     /// <summary>
     /// The implicit cast operator from a value to a successful result.
     /// </summary>
     /// <param name="value">The value to be held by the instance.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Result<TValue>(TValue value) => new(value);
 
     /// <summary>
     /// The implicit cast from <see cref="Result{TValue}"/> to <see cref="Result"/>
     /// </summary>
-    /// <param name="source">The source result</param>
+    /// <param name="source">The source result.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Result(Result<TValue> source)
     {
         return source.isSuccess ? new Result() : new Result(source.error.Value);
@@ -211,7 +221,7 @@ public readonly struct Result
     /// <summary>
     /// Create a failed result using an <see cref="Exception"/>.
     /// </summary>
-    /// <param name="exception">The exception to be held by the result</param>
+    /// <param name="exception">The exception to be held by the result.</param>
     public Result(Exception exception)
     {
         isSuccess = false;
@@ -221,7 +231,7 @@ public readonly struct Result
     /// <summary>
     /// Create a failed result using an <see cref="FastResults.Error"/>.
     /// </summary>
-    /// <param name="error">The error to be held by the result</param>
+    /// <param name="error">The error to be held by the result.</param>
     public Result(Error error)
     {
         isSuccess = false;
@@ -231,8 +241,8 @@ public readonly struct Result
     /// <summary>
     /// Invokes one of the provided callable objects based on whether the result is successful or not.
     /// </summary>
-    /// <param name="succ">The callable object to be invoked when the result is successful</param>
-    /// <param name="fail">The callable object to be invoked when the result is failed</param>
+    /// <param name="succ">The callable object to be invoked when the result is successful.</param>
+    /// <param name="fail">The callable object to be invoked when the result is failed.</param>
     public void Match(Action succ, Action<Error> fail)
     {
         if (isSuccess)
@@ -245,8 +255,8 @@ public readonly struct Result
     /// Returns a value by invoking one of the provided functions based on whether the result is successfull or not.
     /// </summary>
     /// <typeparam name="TRet">Type of the resturning value</typeparam>
-    /// <param name="succ">The function to be invoked when the result is successful</param>
-    /// <param name="fail">The function to be invoked when the result is failed</param>
+    /// <param name="succ">The function to be invoked when the result is successful.</param>
+    /// <param name="fail">The function to be invoked when the result is failed.</param>
     public TRet Match<TRet>(Func<TRet> succ, Func<Error, TRet> fail)
     {
         return isSuccess ? succ() : fail(error.Value);
@@ -255,8 +265,9 @@ public readonly struct Result
     /// <summary>
     /// Returns the returning value of the provided custom handler if the result is successful, otherwise, returns the result instance itself.
     /// </summary>
-    /// <param name="succ">The custom handler</param>
-    /// <returns>A <see cref="Result"/> instnace</returns>
+    /// <param name="succ">The custom handler.</param>
+    /// <returns>A <see cref="Result"/> instnace.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Result IfSuccess(Func<Result> succ)
     {
         return isSuccess ? succ() : this;
@@ -265,8 +276,9 @@ public readonly struct Result
     /// <summary>
     /// Returns the returning value of the provided custom handler if the result is successful, otherwise, returns the result instance itself.
     /// </summary>
-    /// <param name="succ">The custom handler</param>
-    /// <returns>A <see cref="Result"/> instnace</returns>
+    /// <param name="succ">The custom handler.</param>
+    /// <returns>A <see cref="Result"/> instnace.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Task<Result> IfSuccess(Func<Task<Result>> succ)
     {
         return isSuccess ? succ() : Task.FromResult(this);
@@ -275,8 +287,9 @@ public readonly struct Result
     /// <summary>
     /// Returns the returning value of the provided custom handler if the result is failed, otherwise, returns the result instance itself.
     /// </summary>
-    /// <param name="fail">The custom handler</param>
-    /// <returns>A <see cref="Result"/> instnace</returns>
+    /// <param name="fail">The custom handler.</param>
+    /// <returns>A <see cref="Result"/> instnace.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Result IfFailure(Func<Error, Result> fail)
     {
         return isSuccess ? this : fail(Error);
@@ -285,8 +298,9 @@ public readonly struct Result
     /// <summary>
     /// Returns the returning value of the provided custom handler if the result is failed, otherwise, returns the result instance itself.
     /// </summary>
-    /// <param name="fail">The custom handler</param>
-    /// <returns>A <see cref="Result"/> instnace</returns>
+    /// <param name="fail">The custom handler.</param>
+    /// <returns>A <see cref="Result"/> instnace.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Task<Result> IfFailure(Func<Error, Task<Result>> fail)
     {
         return isSuccess ? Task.FromResult(this) : fail(Error);
@@ -295,20 +309,22 @@ public readonly struct Result
     /// <summary>
     /// Creates a successful result.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result Success() => new();
 
     /// <summary>
     /// Create a failed result using an <see cref="FastResults.Error"/> or <see cref="Exception"/>.
     /// </summary>
-    /// <param name="error">The error (or exception) to be held by the result</param>
+    /// <param name="error">The error (or exception) to be held by the result.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result Failure(Error error) => new(error);
 
     /// <summary>
     /// Invokes a callable object in a try/catch block and returns a appropriate result instance.
     /// </summary>
-    /// <param name="action">The callable object to be invoked</param>
-    /// <param name="handler">An oprtional custom expcetion handler which should return a failed result</param>
+    /// <param name="action">The callable object to be invoked.</param>
+    /// <param name="handler">An oprtional custom expcetion handler which should return a failed result.</param>
     /// <returns>A successful result if the callable object executes successully of a failed result if it throws an exception.</returns>
     public static Result Try(Action action, Func<Exception, Result>? handler = null)
     {
@@ -326,8 +342,8 @@ public readonly struct Result
     /// <summary>
     /// Invokes a callable object in a try/catch block and returns a appropriate result instance.
     /// </summary>
-    /// <param name="action">The callable object to be invoked</param>
-    /// <param name="handler">An oprtional custom expcetion handler which should return a failed result</param>
+    /// <param name="action">The callable object to be invoked.</param>
+    /// <param name="handler">An oprtional custom expcetion handler which should return a failed result.</param>
     /// <returns>A successful result if the callable object executes successully of a failed result if it throws an exception.</returns>
     public static Task<Result> Try(Func<Task> action, Func<Exception, Result>? handler = null)
     {

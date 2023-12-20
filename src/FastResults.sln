@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastResults", "FastResults\FastResults.csproj", "{F52D741A-1932-47A2-A6CB-01D147EB2944}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastResults.Test", "FastResults.Test\FastResults.Test.csproj", "{F001B6A4-7376-4158-9B0C-756EBDACDCEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastResults.Test", "FastResults.Test\FastResults.Test.csproj", "{F001B6A4-7376-4158-9B0C-756EBDACDCEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

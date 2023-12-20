@@ -18,7 +18,7 @@ public readonly struct Error
     /// <summary>
     /// Creates an error using an error message.
     /// </summary>
-    /// <param name="message">The actual error message</param>
+    /// <param name="message">The actual error message.</param>
     public Error(string message)
     {
         Message = message;
@@ -28,7 +28,7 @@ public readonly struct Error
     /// <summary>
     /// Creates an error using an exception.
     /// </summary>
-    /// <param name="exception">The exception for which an error should be created</param>
+    /// <param name="exception">The exception for which an error should be created.</param>
     public Error(Exception exception)
     {
         Message = exception.Message;
@@ -38,12 +38,12 @@ public readonly struct Error
     /// <summary>
     /// The implicit cast operator to from a string.
     /// </summary>
-    /// <param name="message">The error message</param>
+    /// <param name="message">The error message.</param>
     public static implicit operator Error(string message) => new Error(message);
 
     /// <summary>
     /// The implicit cast operator to from an exception.
     /// </summary>
-    /// <param name="exception">The exception</param>
+    /// <param name="exception">The exception.</param>
     public static implicit operator Error(Exception exception) => new Error(exception);
 }
