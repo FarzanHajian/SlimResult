@@ -99,58 +99,6 @@ public class OptionTests
         buffer.Should().Be("ERROR");
     }
 
-    //[TestMethod]
-    //public void Equality()
-    //{
-    //    Option<float> opt1 = 2;
-    //    Option<float> opt2 = 3.14f;
-    //    Option<float> opt3 = 3.14f;
-    //    Option<int> opt4 = 2;
-    //    Option<int> opt5 = Option<int>.None();
-
-    //    opt1.Equals(opt2).Should().BeFalse();
-    //    opt1.Equals((object)opt2).Should().BeFalse();
-    //    (opt1 == opt2).Should().BeFalse();
-    //    (opt1 != opt2).Should().BeTrue();
-
-    //    opt3.Equals(opt2).Should().BeTrue();
-    //    opt3.Equals((object)opt2).Should().BeTrue();
-    //    (opt3 == opt2).Should().BeTrue();
-    //    (opt3 != opt2).Should().BeFalse();
-
-    //    opt1.Equals(opt4).Should().BeTrue();
-    //    (opt1 == opt4).Should().BeFalse();
-    //    (opt1 != opt4).Should().BeTrue();
-
-    //    var r = 4.Equals(opt4);
-    //    r = opt4.Equals(4);
-    //    r = opt4 == 4;
-    //    r = 4 == opt4;
-    //    r = opt4 != 4;
-    //    r = 4 != opt4;
-
-    //    r = opt3.Equals(opt4);
-    //    r = opt3 == opt4;
-    //    r = opt3 != opt4;
-
-    //    opt1.Equals(null).Should().BeFalse();
-
-    //    opt4.Equals(opt5).Should().BeFalse();
-    //    opt4.Equals((object)opt5).Should().BeFalse();
-    //    (opt4 == opt5).Should().BeFalse();
-    //    (opt4 != opt5).Should().BeTrue();
-    //}
-
-    //[TestMethod]
-    //public void HashCode()
-    //{
-    //    Option<float> opt = 3.14f;
-    //    opt.GetHashCode().Should().Be(3.14f.GetHashCode());
-
-    //    opt.Unset();
-    //    opt.GetHashCode().Should().Be(0);
-    //}
-
     [TestMethod]
     public void StringRepresentation()
     {

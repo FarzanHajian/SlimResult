@@ -6,7 +6,7 @@ namespace FarzanHajian.FastResults;
 /// Represents a variable that either holds a value or is empty.
 /// </summary>
 /// <typeparam name="TValue">Type of the value this instance can hold</typeparam>
-public struct Option<TValue>// : IEquatable<Option<TValue>>
+public struct Option<TValue>
 {
     private bool isSome;
     private TValue? value;
@@ -110,77 +110,11 @@ public struct Option<TValue>// : IEquatable<Option<TValue>>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Option<TValue> None() => new();
 
-    ///// <summary>
-    ///// Indicates whether the current object is equal to another object of the same type.
-    ///// </summary>
-    ///// <param name="other">An object to compare with this object.</param>
-    ///// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
-    //public readonly bool Equals(Option<TValue> other)
-    //{
-    //    if (isSome && other.isSome) return value!.Equals(other.value!);
-    //    return (isSome == other.isSome);
-    //}
-
-    //public readonly bool Equals(TValue other)
-    //{
-    //    if (!isSome) return false;
-    //    return value!.Equals(other);
-    //}
-
-    //public readonly bool Equals<TOther>(Option<TOther> other)
-    //{
-    //    if (isSome && other.isSome) return value!.Equals(other.value!);
-    //    return (isSome == other.isSome);
-    //}
-
-    ///// <summary>
-    ///// Indicates whether the current object is equal to another object of the same type.
-    ///// </summary>
-    ///// <param name="other">An object to compare with this object.</param>
-    ///// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
-    //public override readonly bool Equals(object? other)
-    //{
-    //    // other == null
-    //    // other == Option<TValue>
-    //    // other == Option<TValue2>
-    //    // other == scalar value (of type TValue / not) if both have value
-
-    //    if (other is null) return false;
-    //    if (other is Option<TValue> opt) return Equals(opt);
-    //    //
-
-    //    ////////////// ORIGINAL
-    //    //if (other is not Option<TValue> opt) return false;
-    //    //return Equals(opt);
-    //}
-
-    ///// <summary>
-    ///// Returns the hash code for this instnace.
-    ///// </summary>
-    ///// <returns>A 32-bit signed integer that is the hash code for this instnace.</returns>
-    //public override readonly int GetHashCode() => isSome ? value!.GetHashCode() : 0;
-
     /// <summary>
     /// Retuens a string that represents the current object.
     /// </summary>
     /// <returns>A string that represents the current object.</returns>
     public override readonly string? ToString() => isSome ? value!.ToString() : "";
-
-    /// <summary>
-    /// Performs the equality check between to objects.
-    /// </summary>
-    /// <param name="left">The left object.</param>
-    /// <param name="right">The right object</param>
-    /// <returns>true if the left object is equal to the right object; otherwise, false.</returns>
-    //public static bool operator ==(Option<TValue> left, Option<TValue> right) => left.Equals(right);
-
-    ///// <summary>
-    ///// Performs the inequality check between to objects.
-    ///// </summary>
-    ///// <param name="left">The left object.</param>
-    ///// <param name="right">The right object</param>
-    ///// <returns>true if the first object is not equal to the second object; otherwise, false.</returns>
-    //public static bool operator !=(Option<TValue> left, Option<TValue> right) => !left.Equals(right);
 
     /// <summary>
     /// The implicit cast operator from a value.
