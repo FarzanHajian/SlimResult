@@ -20,9 +20,14 @@
 	  <Copyright></Copyright>
 	  <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
 	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	  <PackageIcon>Logo.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\Assets\Logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="..\..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
