@@ -9,4 +9,4 @@ SlimResult, inspired by [language-ext](https://github.com/louthy/language-ext) a
 [to be completed]
 
 ## Installation
-SlimResult is available on You can install [nuget](https://www.nuget.org/packages/SlimResult/).
+SlimResult package is available on [Nuget](https://www.nuget.org/packages/FarzanHajian.SlimResult/).
