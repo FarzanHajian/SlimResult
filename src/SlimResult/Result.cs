@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
+using static FarzanHajian.SlimResult.SlimResultHelper;
 
-namespace FarzanHajian.FastResults;
+namespace FarzanHajian.SlimResult;
 
 /// <summary>
 /// Represents an operation result with statuses of either Success or Failure.
@@ -52,7 +53,7 @@ public readonly struct Result<TValue>
     {
         isSuccess = true;
         this.value = value;
-        error = Option<Error>.None();
+        error = None<Error>();
     }
 
     /// <summary>
@@ -63,18 +64,18 @@ public readonly struct Result<TValue>
     {
         isSuccess = false;
         value = default;
-        error = Option<Error>.Some((Error)exception);
+        error = Some((Error)exception);
     }
 
     /// <summary>
-    /// Create a failed result using an <see cref="FastResults.Error"/>.
+    /// Create a failed result using an <see cref="SlimResult.Error"/>.
     /// </summary>
     /// <param name="error">The error to be held by the result.</param>
     public Result(Error error)
     {
         isSuccess = false;
         value = default;
-        this.error = Option<Error>.Some(error);
+        this.error = Some(error);
     }
 
     /// <summary>
@@ -153,20 +154,6 @@ public readonly struct Result<TValue>
     }
 
     /// <summary>
-    /// Creates a successful result that holds the given value.
-    /// </summary>
-    /// <param name="value">The value to be held by the result.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TValue> Success(TValue value) => new(value);
-
-    /// <summary>
-    /// Create a failed result using an <see cref="FastResults.Error"/> or <see cref="Exception"/>.
-    /// </summary>
-    /// <param name="error">The error (or exception) to be held by the result.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TValue> Failure(Error error) => new(error);
-
-    /// <summary>
     /// The implicit cast operator from a value to a successful result.
     /// </summary>
     /// <param name="value">The value to be held by the instance.</param>
@@ -215,7 +202,7 @@ public readonly struct Result
     public Result()
     {
         isSuccess = true;
-        error = Option<Error>.None();
+        error = None<Error>();
     }
 
     /// <summary>
@@ -225,17 +212,17 @@ public readonly struct Result
     public Result(Exception exception)
     {
         isSuccess = false;
-        error = Option<Error>.Some(exception);
+        error = Some((Error)exception);
     }
 
     /// <summary>
-    /// Create a failed result using an <see cref="FastResults.Error"/>.
+    /// Create a failed result using an <see cref="SlimResult.Error"/>.
     /// </summary>
     /// <param name="error">The error to be held by the result.</param>
     public Result(Error error)
     {
         isSuccess = false;
-        this.error = Option<Error>.Some(error);
+        this.error = Some(error);
     }
 
     /// <summary>
@@ -304,55 +291,5 @@ public readonly struct Result
     public Task<Result> IfFailure(Func<Error, Task<Result>> fail)
     {
         return isSuccess ? Task.FromResult(this) : fail(Error);
-    }
-
-    /// <summary>
-    /// Creates a successful result.
-    /// </summary>
-    /// <returns>.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result Success() => new();
-
-    /// <summary>
-    /// Create a failed result using an <see cref="FastResults.Error"/> or <see cref="Exception"/>.
-    /// </summary>
-    /// <param name="error">The error (or exception) to be held by the result.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result Failure(Error error) => new(error);
-
-    /// <summary>
-    /// Invokes a callable object in a try/catch block and returns a appropriate result instance.
-    /// </summary>
-    /// <param name="action">The callable object to be invoked.</param>
-    /// <param name="handler">An oprtional custom expcetion handler which should return a failed result.</param>
-    /// <returns>A successful result if the callable object executes successully of a failed result if it throws an exception.</returns>
-    public static Result Try(Action action, Func<Exception, Result>? handler = null)
-    {
-        try
-        {
-            action();
-            return new Result();
-        }
-        catch (Exception ex)
-        {
-            return handler?.Invoke(ex) ?? new Result(ex);
-        }
-    }
-
-    /// <summary>
-    /// Invokes a callable object in a try/catch block and returns a appropriate result instance.
-    /// </summary>
-    /// <param name="action">The callable object to be invoked.</param>
-    /// <param name="handler">An oprtional custom expcetion handler which should return a failed result.</param>
-    /// <returns>A successful result if the callable object executes successully of a failed result if it throws an exception.</returns>
-    public static Task<Result> Try(Func<Task> action, Func<Exception, Result>? handler = null)
-    {
-        return action().ContinueWith(Continue);
-
-        Result Continue(Task task)
-        {
-            if (task.IsCompletedSuccessfully) return new Result();
-            return handler?.Invoke(task.Exception!.InnerException!) ?? new Result(task.Exception!.InnerException!);
-        }
     }
 }

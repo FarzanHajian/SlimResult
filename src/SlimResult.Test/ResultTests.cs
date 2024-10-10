@@ -1,22 +1,22 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FastResults.Test;
+namespace SlimResult.Test;
 
 [TestClass]
 public class ResultTests
 {
     [TestMethod]
-    public void CreateSuccess()
+    public void CreateSuccessTest()
     {
         Result result = new();
         TestSuccess(result);
 
-        result = Result.Success();
+        result = Success();
         TestSuccess(result);
     }
 
     [TestMethod]
-    public void CreateFailure()
+    public void CreateFailureTest()
     {
         Result result = new(new Exception("Invalid Data"));
         TestFailure(result, "Invalid Data");
@@ -24,12 +24,15 @@ public class ResultTests
         result = new(new Error("Invalid Value"));
         TestFailure(result, "Invalid Value");
 
-        result = Result.Failure(new Error("Invalid Operation"));
+        result = Failure(new Error("Invalid Operation"));
+        TestFailure(result, "Invalid Operation");
+
+        result = Failure(new ApplicationException("Invalid Operation"));
         TestFailure(result, "Invalid Operation");
     }
 
     [TestMethod]
-    public void Match()
+    public void MatchTest()
     {
         string buffer = "";
         Result result = new();
@@ -42,7 +45,7 @@ public class ResultTests
     }
 
     [TestMethod]
-    public async Task MatchAsync()
+    public async Task MatchAsyncTest()
     {
         string buffer = "";
         Result result = new();
@@ -55,7 +58,7 @@ public class ResultTests
     }
 
     [TestMethod]
-    public void MatchReturn()
+    public void MatchReturnTest()
     {
         string buffer = "";
         Result result = new();
@@ -68,7 +71,7 @@ public class ResultTests
     }
 
     [TestMethod]
-    public async Task MatchReturnAsync()
+    public async Task MatchReturnAsyncTest()
     {
         string buffer = "";
         Result result = new();
@@ -81,49 +84,49 @@ public class ResultTests
     }
 
     [TestMethod]
-    public void Try()
+    public void TryTest()
     {
         Action act = () => { };
         Action actFailure = () => { throw new Exception("Bad Data"); };
 
-        Result result = Result.Try(act);
+        Result result = Try(act);
         result.IsSuccess.Should().BeTrue();
 
-        result = Result.Try(act, err => new Result($"Error: {err.Message}"));
+        result = Try(act, err => new Result($"Error: {err.Message}"));
         result.IsSuccess.Should().BeTrue();
 
-        result = Result.Try(actFailure);
+        result = Try(actFailure);
         result.IsFailure.Should().BeTrue();
         result.Error.Message.Should().Be("Bad Data");
 
-        result = Result.Try(actFailure, err => new Result($"Error: {err.Message}"));
+        result = Try(actFailure, err => new Result($"Error: {err.Message}"));
         result.IsFailure.Should().BeTrue();
         result.Error.Message.Should().Be("Error: Bad Data");
     }
 
     [TestMethod]
-    public async Task TryAsync()
+    public async Task TryAsyncTest()
     {
         Func<Task> act = async () => { await Task.CompletedTask; };
         Func<Task> actFailure = async () => { await Task.CompletedTask; throw new Exception("Bad Data"); };
 
-        Result result = await Result.Try(act);
+        Result result = await Try(act);
         result.IsSuccess.Should().BeTrue();
 
-        result = await Result.Try(act, err => new Result($"Error: {err.Message}"));
+        result = await Try(act, err => new Result($"Error: {err.Message}"));
         result.IsSuccess.Should().BeTrue();
 
-        result = await Result.Try(actFailure);
+        result = await Try(actFailure);
         result.IsFailure.Should().BeTrue();
         result.Error.Message.Should().Be("Bad Data");
 
-        result = await Result.Try(actFailure, err => new Result($"Error: {err.Message}"));
+        result = await Try(actFailure, err => new Result($"Error: {err.Message}"));
         result.IsFailure.Should().BeTrue();
         result.Error.Message.Should().Be("Error: Bad Data");
     }
 
     [TestMethod]
-    public void IfSuccess()
+    public void IfSuccessTest()
     {
         Result success = new();
         Result result = success.IfSuccess(() => new Result("Invalid Operation"));
@@ -135,7 +138,7 @@ public class ResultTests
     }
 
     [TestMethod]
-    public async Task IfSuccessAsync()
+    public async Task IfSuccessAsyncTest()
     {
         Result success = new();
         Result result = await success.IfSuccess(async () => { await Task.CompletedTask; return new Result("Invalid Operation"); });
@@ -147,7 +150,7 @@ public class ResultTests
     }
 
     [TestMethod]
-    public void IfFailure()
+    public void IfFailureTest()
     {
         var fail = (Error err) => new Result("Failure, " + err.Message);
 
@@ -161,7 +164,7 @@ public class ResultTests
     }
 
     [TestMethod]
-    public async Task IfFailureAsync()
+    public async Task IfFailureAsyncTest()
     {
         var fail = async (Error err) => { await Task.CompletedTask; return new Result("Failure, " + err.Message); };
 

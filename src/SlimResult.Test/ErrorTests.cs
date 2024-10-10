@@ -1,10 +1,10 @@
-﻿namespace FastResults.Test
+﻿namespace SlimResult.Test
 {
     [TestClass]
     public class ErrorTests
     {
         [TestMethod]
-        public void CreateByMessage()
+        public void CreateByMessageTest()
         {
             Error error = new("Bad Data");
             error.Message.Should().Be("Bad Data");
@@ -12,7 +12,7 @@
         }
 
         [TestMethod]
-        public void CreateByException()
+        public void CreateByExceptionTest()
         {
             Exception exception = new("Failed Operation");
             Error error = new(exception);
@@ -22,7 +22,7 @@
         }
 
         [TestMethod]
-        public void ImplicitCasts()
+        public void ImplicitCastsTest()
         {
             Error error = "Bad Data";
             error.Message.Should().Be("Bad Data");

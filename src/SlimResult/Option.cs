@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace FarzanHajian.FastResults;
+namespace FarzanHajian.SlimResult;
 
 /// <summary>
 /// Represents a variable that either holds a value or is empty.
@@ -98,19 +98,6 @@ public struct Option<TValue>
     }
 
     /// <summary>
-    /// Creates a variable that hold a value or throws an <see cref="ArgumentNullException"></see> if the value is null.
-    /// </summary>
-    /// <param name="value">.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Option<TValue> Some(TValue value) => new(value);
-
-    /// <summary>
-    /// Creates an empty variable.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Option<TValue> None() => new();
-
-    /// <summary>
     /// Retuens a string that represents the current object.
     /// </summary>
     /// <returns>A string that represents the current object.</returns>
@@ -129,27 +116,4 @@ public struct Option<TValue>
     /// <param name="option">The source option instance.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator TValue(Option<TValue> option) => option.Value;
-}
-
-/// <summary>
-/// A class that contains <see cref="Option{TValue}"/> helper methods.
-/// </summary>
-public static class OptionHelper
-{
-    /// <summary>
-    /// A helper method that wraps <see cref="Option{TValue}.Some(TValue)"/>.
-    /// </summary>
-    /// <typeparam name="TValue">Type of the value.</typeparam>
-    /// <param name="value">The value to be passed to <see cref="Option{TValue}.Some(TValue)"/>.</param>
-    /// <returns>Returns an instance of <see cref="Option{TValue}.Some(TValue)"/>.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Option<TValue> Some<TValue>(TValue value) => new(value);
-
-    /// <summary>
-    /// A helper method that wraps <see cref="Option{TValue}.None"/>.
-    /// </summary>
-    /// <typeparam name="TValue">Type of the value.</typeparam>
-    /// <returns>Returns an instance of <see cref="Option{TValue}.Some(TValue)"/>.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Option<TValue> None<TValue>() => new();
 }

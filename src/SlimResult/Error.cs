@@ -1,4 +1,4 @@
-﻿namespace FarzanHajian.FastResults;
+﻿namespace FarzanHajian.SlimResult;
 
 /// <summary>
 /// Represents an occured error.

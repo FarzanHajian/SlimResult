@@ -6,17 +6,17 @@
 	  <Nullable>enable</Nullable>
 	  <RootNamespace>FarzanHajian.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 	  <PackageId>FarzanHajian.$(AssemblyName)</PackageId>
-	  <Title>FastResults</Title>
+	  <Title>SlimResult</Title>
 	  <Authors>Farzan Hajian</Authors>
-	  <Description>A nimble .NET library for implementing the Result pattern, enhancing code readability and error management in your applications.</Description>
+	  <Description>A lightweight .NET library for implementing the Result pattern, improving code clarity and simplifying error handling.</Description>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-	  <PackageProjectUrl>https://github.com/FarzanHajian/FastResults</PackageProjectUrl>
+	  <PackageProjectUrl>https://github.com/FarzanHajian/SlimResult</PackageProjectUrl>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
-	  <RepositoryUrl>https://github.com/FarzanHajian/FastResults</RepositoryUrl>
+	  <RepositoryUrl>https://github.com/FarzanHajian/SlimResult</RepositoryUrl>
 	  <PackageTags>result optional</PackageTags>
-	  <AssemblyVersion>1.0.2</AssemblyVersion>
+	  <AssemblyVersion>1.0.0</AssemblyVersion>
 	  <FileVersion>$(AssemblyVersion)</FileVersion>
-	  <Version>$(AssemblyVersion)-alpha2</Version>
+	  <Version>$(AssemblyVersion)-beta1</Version>
 	  <Copyright></Copyright>
 	  <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
 	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -27,6 +27,10 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,12 @@
-namespace FastResults.Test;
+namespace SlimResult.Test;
 
 [TestClass]
 public class OptionTests
 {
     [TestMethod]
-    public void Some()
+    public void SomeTest()
     {
-        Option<int> option = Option<int>.Some(20);
+        Option<int> option = Some(20);
         TestSome(option, 20, -99);
 
         option = new Option<int>(1361);
@@ -14,9 +14,9 @@ public class OptionTests
     }
 
     [TestMethod]
-    public void None()
+    public void NoneTest()
     {
-        Option<int> option = Option<int>.None();
+        Option<int> option = None<int>();
         TestNone(option, -99);
 
         option = new Option<int>();
@@ -24,31 +24,31 @@ public class OptionTests
     }
 
     [TestMethod]
-    public void Null()
+    public void NullTest()
     {
         Action act = () => { Option<string> option = new(null!); };
         act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'value')");
 
-        act = () => { Option<string> option = Option<string>.Some(null!); };
+        act = () => { Option<string> option = Some<string>(null!); };
         act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'value')");
     }
 
     [TestMethod]
-    public void SetUnset()
+    public void SetUnsetTest()
     {
-        Option<float> option = new Option<float>(3.14f);
+        Option<float> option = new(3.14f);
         option.Set(2.71f);
         TestSome(option, 2.71f, -99);
 
         option.Unset();
         TestNone(option, -99);
 
-        Action act = () => { var option = Option<string>.Some("Hello"); option.Set(null!); };
+        Action act = () => { var option = Some("Hello"); option.Set(null!); };
         act.Should().Throw<ArgumentNullException>();
     }
 
     [TestMethod]
-    public void Match()
+    public void MatchTest()
     {
         string buffer = "";
         Option<string> option = new("Valid data");
@@ -61,7 +61,7 @@ public class OptionTests
     }
 
     [TestMethod]
-    public async Task MatchAsync()
+    public async Task MatchAsyncTest()
     {
         string buffer = "";
         Option<string> option = new("Valid data");
@@ -74,7 +74,7 @@ public class OptionTests
     }
 
     [TestMethod]
-    public void MatchWithReturn()
+    public void MatchWithReturnTest()
     {
         string buffer = "";
         Option<string> option = new("Valid data");
@@ -87,7 +87,7 @@ public class OptionTests
     }
 
     [TestMethod]
-    public async Task MatchWithReturnAsync()
+    public async Task MatchWithReturnAsyncTest()
     {
         string buffer = "";
         Option<string> option = new("Valid data");
@@ -100,7 +100,7 @@ public class OptionTests
     }
 
     [TestMethod]
-    public void StringRepresentation()
+    public void StringRepresentatioTestn()
     {
         Option<float> opt = 123.45f;
         opt.ToString().Should().Be("123.45");
@@ -110,7 +110,7 @@ public class OptionTests
     }
 
     [TestMethod]
-    public void ImplicitCasts()
+    public void ImplicitCastsTest()
     {
         Option<int> iOption = 7;
         TestSome(iOption, 7, -99);

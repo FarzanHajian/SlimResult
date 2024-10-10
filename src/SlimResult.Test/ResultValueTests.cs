@@ -1,23 +1,23 @@
-﻿using FarzanHajian.FastResults;
+﻿using FarzanHajian.SlimResult;
 using System.Runtime.CompilerServices;
 
-namespace FastResults.Test;
+namespace SlimResult.Test;
 
 [TestClass]
 public class ResultValueTests
 {
     [TestMethod]
-    public void CreateSuccess()
+    public void CreateSuccessTest()
     {
         Result<int> iresult = new(20);
         TestSuccess(iresult, 20, -1);
 
-        Result<float> fresult = Result<float>.Success(3.14f);
+        Result<float> fresult = Success(3.14f);
         TestSuccess(fresult, 3.14f, -1.0f);
     }
 
     [TestMethod]
-    public void CreateFailure()
+    public void CreateFailureTest()
     {
         Result<string> sresult = new(new Exception("Invalid String Data"));
         TestFailure(sresult, "Invalid String Data", "ERROR");
@@ -25,19 +25,22 @@ public class ResultValueTests
         Result<float> fresult = new(new Error("Invalid Float Data"));
         TestFailure(fresult, "Invalid Float Data", -1.1f);
 
-        Result<int> iresult = Result<int>.Failure(new Error("Invalid Operation"));
+        Result<int> iresult = Failure<int>(new Error("Invalid Operation"));
         TestFailure(iresult, "Invalid Operation", -1);
+
+        Result<decimal> dresult = Failure<decimal>(new ApplicationException("Invalid Operation"));
+        TestFailure(dresult, "Invalid Operation", -1);
     }
 
     [TestMethod]
-    public void DefaultConstructor()
+    public void DefaultConstructorTest()
     {
         Action act = () => { Result<string> result = new(); };
         act.Should().Throw<InvalidOperationException>().WithMessage("Using the default contructor is not valid.");
     }
 
     [TestMethod]
-    public void Match()
+    public void MatchTest()
     {
         string buffer = "";
         Result<string> result = new("Valid Data");
@@ -50,7 +53,7 @@ public class ResultValueTests
     }
 
     [TestMethod]
-    public async Task MatchAsync()
+    public async Task MatchAsyncTest()
     {
         string buffer = "";
         Result<string> result = new("Valid Data");
@@ -63,7 +66,7 @@ public class ResultValueTests
     }
 
     [TestMethod]
-    public void MatchValue()
+    public void MatchValueTest()
     {
         string buffer = "";
         Result<string> result = new("Valid Data");
@@ -76,7 +79,7 @@ public class ResultValueTests
     }
 
     [TestMethod]
-    public async Task MatchValueAsync()
+    public async Task MatchValueAsyncTest()
     {
         string buffer = "";
         Result<string> result = new("Valid Data");
@@ -89,7 +92,7 @@ public class ResultValueTests
     }
 
     [TestMethod]
-    public void IfSuccess()
+    public void IfSuccessTest()
     {
         var succ = (string val) => new Result<string>(val + " Operation Result");
 
@@ -103,7 +106,7 @@ public class ResultValueTests
     }
 
     [TestMethod]
-    public async Task IfSuccessAsync()
+    public async Task IfSuccessAsyncTest()
     {
         var succ = async (string val) => { await Task.CompletedTask; return new Result<string>(val + " Operation Result"); };
 
@@ -117,7 +120,7 @@ public class ResultValueTests
     }
 
     [TestMethod]
-    public void IfFailure()
+    public void IfFailureTest()
     {
         var fail = (Error err) => new Result<string>(new Error(err.Message + " Operation Result"));
 
@@ -131,7 +134,7 @@ public class ResultValueTests
     }
 
     [TestMethod]
-    public async Task IfFailureAsync()
+    public async Task IfFailureAsyncTest()
     {
         var fail = async (Error err) => { await Task.CompletedTask; return new Result<string>(new Error(err.Message + " Operation Result")); };
 
@@ -145,14 +148,14 @@ public class ResultValueTests
     }
 
     [TestMethod]
-    public void ImplicitCastFromValue()
+    public void ImplicitCastFromValueTest()
     {
         Result<int> result = 7;
         TestSuccess(result, 7, -1);
     }
 
     [TestMethod]
-    public void ImplicitCastToResult()
+    public void ImplicitCastToResultTest()
     {
         Result<int> src = new(7);
         Result dest = src;
