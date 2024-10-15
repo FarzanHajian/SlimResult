@@ -53,7 +53,7 @@ public static class SlimResultHelper
     public static Result Failure(Error error) => new(error);
 
     /// <summary>
-    /// Invokes a callable object in a try/catch block and returns a appropriate result instance.
+    /// Invokes a callable object in a try/catch block and returns an appropriate result instance.
     /// </summary>
     /// <param name="action">The callable object to be invoked.</param>
     /// <param name="handler">An oprtional custom expcetion handler which should return a failed result.</param>
@@ -72,7 +72,7 @@ public static class SlimResultHelper
     }
 
     /// <summary>
-    /// Invokes a callable object in a try/catch block and returns a appropriate result instance.
+    /// Invokes a callable object in a try/catch block and returns an appropriate result instance.
     /// </summary>
     /// <param name="action">The callable object to be invoked.</param>
     /// <param name="handler">An oprtional custom expcetion handler which should return a failed result.</param>
