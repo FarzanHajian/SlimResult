@@ -16,7 +16,7 @@
 	  <PackageTags>result optional</PackageTags>
 	  <AssemblyVersion>1.0.0</AssemblyVersion>
 	  <FileVersion>$(AssemblyVersion)</FileVersion>
-	  <Version>$(AssemblyVersion)-beta1</Version>
+	  <Version>$(AssemblyVersion)-beta2</Version>
 	  <Copyright>© Farzan Hajian 2024</Copyright>
 	  <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
 	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
