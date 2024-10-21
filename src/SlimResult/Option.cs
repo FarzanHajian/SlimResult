@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace FarzanHajian.SlimResult;
 
@@ -6,7 +7,7 @@ namespace FarzanHajian.SlimResult;
 /// Represents a variable that either holds a value or is empty.
 /// </summary>
 /// <typeparam name="TValue">Type of the value this instance can hold</typeparam>
-public struct Option<TValue>
+public partial struct Option<TValue> : IEquatable<Option<TValue>>, IComparable<Option<TValue>>, IComparable
 {
     private bool isSome;
     private TValue? value;
@@ -71,7 +72,7 @@ public struct Option<TValue>
     /// </summary>
     /// <param name="default">The default value to be returned if the instance is empty.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public TValue ValueOrDefault(TValue @default) => IsSome ? value! : @default;
+    public readonly TValue ValueOrDefault(TValue @default) => IsSome ? value! : @default;
 
     /// <summary>
     /// Invokes one of the provided callable objects based on whether the instance holds a value or not.

@@ -100,7 +100,7 @@ public class OptionTests
     }
 
     [TestMethod]
-    public void StringRepresentatioTestn()
+    public void StringRepresentatioTest()
     {
         Option<float> opt = 123.45f;
         opt.ToString().Should().Be("123.45");
@@ -124,6 +124,162 @@ public class OptionTests
         action.Should().Throw<InvalidOperationException>().WithMessage($"The current {nameof(Option<string>)} instance is empty.");
     }
 
+    [TestMethod]
+    public void EqualityGenericTest()
+    {
+        Option<float> f1 = 12.45f;
+        Option<float> f2 = 12.45f;
+        Option<float> f3 = 12f;
+        Option<float> f4 = None<float>();
+
+        f1.Equals(f2).Should().Be(true);
+        f2.Equals(f1).Should().Be(true);
+
+        f1.Equals(f3).Should().Be(false);
+        f3.Equals(f1).Should().Be(false);
+
+        f1.Equals(f4).Should().Be(false);
+        f4.Equals(f1).Should().Be(false);
+
+        f4.Equals(None<float>()).Should().Be(true);
+    }
+
+    [TestMethod]
+    public void EqualityTest()
+    {
+        Option<float> f1 = 12.45f;
+        object f2 = Some(12.45f);
+        object f3 = Some(12f);
+        Option<float> f4 = None<float>();
+
+        f1.Equals(f2).Should().Be(true);
+        f1.Equals(f3).Should().Be(false);
+        f1.Equals(null).Should().Be(false);
+        f1.Equals("").Should().Be(false);
+        f1.Equals(Some("")).Should().Be(false);
+        f4.Equals(null).Should().Be(false);
+    }
+
+    [TestMethod]
+    public void CompareToGenereicTest()
+    {
+        Option<float> f1 = 45.12f;
+        Option<float> f2 = 45.12f;
+        Option<float> f3 = 45f;
+        Option<float> f4 = None<float>();
+        Option<float> f5 = None<float>();
+
+        f1.CompareTo(f2).Should().Be(0);
+        f1.CompareTo(f3).Should().Be(1);
+        f3.CompareTo(f1).Should().Be(-1);
+
+        f1.CompareTo(f4).Should().Be(1);
+        f4.CompareTo(f1).Should().Be(-1);
+
+        f4.CompareTo(f5).Should().Be(0);
+
+        f1.CompareTo(f1).Should().Be(0);
+        f5.CompareTo(f5).Should().Be(0);
+
+        Some(new ComparableOnly()).CompareTo(new ComparableOnly()).Should().Be(0);
+
+        Action act = () => Some(new { I1 = 12, I2 = 14 }).CompareTo(new { I1 = 12, I2 = 14 });
+        act.Should().Throw<ArgumentException>().WithMessage("TValue must impelement either IComparable or IComparable<T>.");
+    }
+
+    [TestMethod]
+    public void CompareTest()
+    {
+        Option<float> f1 = 45.12f;
+        object f2 = Some(45.12f);
+        object f3 = Some(45f);
+
+        f1.CompareTo(f2).Should().Be(0);
+        f1.CompareTo(f3).Should().Be(1);
+
+        Action act = () => f1.CompareTo(null);
+        act.Should().Throw<ArgumentException>().WithMessage("obj is not the same type as this instance.");
+
+        act = () => f1.CompareTo("My message");
+        act.Should().Throw<ArgumentException>().WithMessage("obj is not the same type as this instance.");
+
+        act = () => f1.CompareTo(Some("My message #2"));
+        act.Should().Throw<ArgumentException>().WithMessage("obj is not the same type as this instance.");
+    }
+
+    [TestMethod]
+    public void GetHashCodeTest()
+    {
+        double v = 12.45;
+        Some(v).GetHashCode().Should().Be(v.GetHashCode());
+
+        None<decimal>().GetHashCode().Should().Be(0);
+    }
+
+    [TestMethod]
+    public void EqalityOperatorTest()
+    {
+        Option<float> f1 = 12.45f;
+        Option<float> f2 = 12.45f;
+        Option<float> f3 = 12.0f;
+        Option<float> f4 = None<float>();
+        Option<float> f5 = None<float>();
+
+        (f1 == f2).Should().Be(true);
+        (f2 == f1).Should().Be(true);
+        (f1 == f3).Should().Be(false);
+        (f3 == f1).Should().Be(false);
+        (f1 == f4).Should().Be(false);
+        (f4 == f1).Should().Be(false);
+        (f4 == f5).Should().Be(true);
+
+        (f1 != f2).Should().Be(false);
+        (f2 != f1).Should().Be(false);
+        (f1 != f3).Should().Be(true);
+        (f3 != f1).Should().Be(true);
+        (f1 != f4).Should().Be(true);
+        (f4 != f1).Should().Be(true);
+        (f4 != f5).Should().Be(false);
+    }
+
+    [TestMethod]
+    public void CompareOperatorTest()
+    {
+        Option<float> f1 = 12.45f;
+        Option<float> f2 = 12.45f;
+        Option<float> f3 = 12.0f;
+        Option<float> f4 = None<float>();
+        Option<float> f5 = None<float>();
+
+        (f1 < f2).Should().Be(false);
+        (f1 < f3).Should().Be(false);
+        (f3 < f1).Should().Be(true);
+        (f1 < f4).Should().Be(false);
+        (f4 < f3).Should().Be(false);
+        (f4 < f5).Should().Be(false);
+
+        (f1 <= f2).Should().Be(true);
+        (f1 <= f3).Should().Be(false);
+        (f3 <= f1).Should().Be(true);
+        (f1 <= f4).Should().Be(false);
+        (f4 <= f3).Should().Be(false);
+        (f4 <= f5).Should().Be(true);
+
+        (f1 > f2).Should().Be(false);
+        (f1 > f3).Should().Be(true);
+        (f3 > f1).Should().Be(false);
+        (f1 > f4).Should().Be(false);
+        (f4 > f3).Should().Be(false);
+        (f4 > f5).Should().Be(false);
+
+        (f1 >= f2).Should().Be(true);
+        (f1 >= f3).Should().Be(true);
+        (f3 >= f1).Should().Be(false);
+        (f1 >= f4).Should().Be(false);
+        (f4 >= f3).Should().Be(false);
+        (f4 >= f5).Should().Be(true);
+    }
+
     private static void TestSome<T>(Option<T> option, T expectedValue, T defaultValue)
     {
         option.IsSome.Should().BeTrue();
@@ -138,5 +294,10 @@ public class OptionTests
         option.IsSome.Should().BeFalse();
         option.Invoking(o => o.Value).Should().Throw<InvalidOperationException>().WithMessage($"The current {nameof(Option<T>)} instance is empty.");
         option.ValueOrDefault(defaultValue).Should().Be(defaultValue);
+    }
+
+    private class ComparableOnly : IComparable
+    {
+        public int CompareTo(object? obj) => 0;
     }
 }
