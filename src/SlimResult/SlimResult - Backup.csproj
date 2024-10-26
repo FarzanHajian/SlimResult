@@ -16,7 +16,7 @@
 	  <PackageTags>result optional</PackageTags>
 	  <AssemblyVersion>1.0.0.0</AssemblyVersion>
 	  <FileVersion>$(AssemblyVersion)</FileVersion>
-	  <Version>$(AssemblyVersion)</Version>
+	  <Version>$(VersionPrefix)</Version>
 	  <Copyright>© Farzan Hajian 2023</Copyright>
 	  <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
 	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -33,6 +33,10 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>
