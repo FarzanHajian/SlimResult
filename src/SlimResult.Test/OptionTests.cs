@@ -121,7 +121,7 @@ public class OptionTests
 
         Option<string> empty = new();
         var action = () => { string sValue = empty; };
-        action.Should().Throw<InvalidOperationException>().WithMessage($"The current {nameof(Option<string>)} instance is empty.");
+        action.Should().Throw<InvalidOperationException>().WithMessage($"An empty Option of string cannot be converted to a value of type string.");
     }
 
     [TestMethod]
@@ -292,7 +292,7 @@ public class OptionTests
     {
         option.IsNone.Should().BeTrue();
         option.IsSome.Should().BeFalse();
-        option.Invoking(o => o.Value).Should().Throw<InvalidOperationException>().WithMessage($"The current {nameof(Option<T>)} instance is empty.");
+        option.Invoking(o => o.Value).Should().Throw<InvalidOperationException>().WithMessage($"The current Option instance is empty.");
         option.ValueOrDefault(defaultValue).Should().Be(defaultValue);
     }
 

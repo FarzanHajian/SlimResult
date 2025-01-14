@@ -14,7 +14,7 @@
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <RepositoryUrl>https://github.com/FarzanHajian/SlimResult</RepositoryUrl>
 	  <PackageTags>result optional</PackageTags>
-	  <AssemblyVersion>1.0.0.0</AssemblyVersion>
+	  <AssemblyVersion>1.0.1.0</AssemblyVersion>
 	  <FileVersion>$(AssemblyVersion)</FileVersion>
 	  <Version>$(AssemblyVersion)</Version>
 	  <Copyright>© Farzan Hajian 2024</Copyright>

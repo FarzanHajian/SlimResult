@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
 namespace FarzanHajian.SlimResult;
 
@@ -25,7 +24,7 @@ public partial struct Option<TValue> : IEquatable<Option<TValue>>, IComparable<O
     /// <summary>
     /// Returns the current value held by the instance or throws <see cref="ArgumentNullException"></see> if it is empty.
     /// </summary>
-    public readonly TValue Value => isSome ? value! : throw new InvalidOperationException($"The current {nameof(Option<TValue>)} instance is empty.");
+    public readonly TValue Value => isSome ? value! : throw new InvalidOperationException($"The current Option instance is empty.");
 
     /// <summary>
     /// Creates an empty variable.
@@ -72,7 +71,7 @@ public partial struct Option<TValue> : IEquatable<Option<TValue>>, IComparable<O
     /// </summary>
     /// <param name="default">The default value to be returned if the instance is empty.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly TValue ValueOrDefault(TValue @default) => IsSome ? value! : @default;
+    public readonly TValue ValueOrDefault(TValue @default) => isSome ? value! : @default;
 
     /// <summary>
     /// Invokes one of the provided callable objects based on whether the instance holds a value or not.
@@ -116,5 +115,10 @@ public partial struct Option<TValue> : IEquatable<Option<TValue>>, IComparable<O
     /// </summary>
     /// <param name="option">The source option instance.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator TValue(Option<TValue> option) => option.Value;
+    public static implicit operator TValue(Option<TValue> option)
+    {
+        return option.isSome
+            ? option.Value
+            : throw new InvalidOperationException($"An empty Option of {typeof(TValue).Name} cannot be converted to a value of type {typeof(TValue).Name}.");
+    }
 }
